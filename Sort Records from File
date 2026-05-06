@@ -1,0 +1,34 @@
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+public class SortRecords {
+    public static void main(String[] args) {
+        List<Student> students = new ArrayList<>();
+
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("records.ser"))) {
+            @SuppressWarnings("unchecked")
+            List<Student> loadedList = (List<Student>) ois.readObject();
+            students.addAll(loadedList);
+            
+            Collections.sort(students, new Comparator<Student>() {
+                @Override
+                public int compare(Student s1, Student s2) {
+                    return Double.compare(s2.gpa, s1.gpa);
+                }
+            });
+
+            System.out.println("Students sorted by GPA (Highest to Lowest):");
+            for (Student s : students) {
+                System.out.println(s);
+            }
+
+        } catch (FileNotFoundException e) {
+            System.out.println("Error: records.ser not found. Please run the previous program first.");
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+}
