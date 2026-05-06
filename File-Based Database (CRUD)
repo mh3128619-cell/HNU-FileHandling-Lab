@@ -1,0 +1,87 @@
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class SimpleCRUD {
+    private static final String FILE_NAME = "database.txt";
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            System.out.println("\n1. Add 2. View 3. Update 4. Delete 5. Exit");
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+
+            if (choice == 5) break;
+
+            switch (choice) {
+                case 1 -> addRecord(scanner);
+                case 2 -> viewRecords();
+                case 3 -> updateRecord(scanner);
+                case 4 -> deleteRecord(scanner);
+            }
+        }
+        scanner.close();
+    }
+
+    private static void addRecord(Scanner sc) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILE_NAME, true))) {
+            System.out.print("Enter ID and Name (e.g., 101,Mohamed): ");
+            bw.write(sc.nextLine());
+            bw.newLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void viewRecords() {
+        try (BufferedReader br = new BufferedReader(new FileReader(FILE_NAME))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                System.out.println(line);
+            }
+        } catch (IOException e) {
+            System.out.println("No records found.");
+        }
+    }
+
+    private static void updateRecord(Scanner sc) {
+        System.out.print("Enter ID to update: ");
+        String id = sc.nextLine();
+        System.out.print("Enter new details: ");
+        String newData = sc.nextLine();
+        processFile(id, newData, false);
+    }
+
+    private static void deleteRecord(Scanner sc) {
+        System.out.print("Enter ID to delete: ");
+        String id = sc.nextLine();
+        processFile(id, null, true);
+    }
+
+    private static void processFile(String id, String newData, boolean isDelete) {
+        List<String> records = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(FILE_NAME))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (line.startsWith(id + ",")) {
+                    if (!isDelete) records.add(newData);
+                } else {
+                    records.add(line);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILE_NAME))) {
+            for (String r : records) {
+                bw.write(r);
+                bw.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
