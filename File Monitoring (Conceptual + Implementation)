@@ -1,0 +1,31 @@
+import java.io.File;
+
+public class FileMonitor {
+    public static void main(String[] args) {
+        File file = new File("log.txt");
+        
+        if (!file.exists()) {
+            System.out.println("File does not exist. Please create log.txt first.");
+            return;
+        }
+
+        long lastModified = file.lastModified();
+        System.out.println("Monitoring " + file.getName() + " for changes...");
+
+        try {
+            while (true) {
+                long currentModified = file.lastModified();
+
+                if (currentModified != lastModified) {
+                    System.out.println("File modified at: " + currentModified);
+                    lastModified = currentModified;
+                }
+
+                Thread.sleep(1000); 
+            }
+        } catch (InterruptedException e) {
+            System.out.println("Monitoring interrupted.");
+            e.printStackTrace();
+        }
+    }
+}
