@@ -1,0 +1,65 @@
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+class Student implements Serializable {
+    private static final long serialVersionUID = 1L;
+    int id;
+    String name;
+    double gpa;
+
+    public Student(int id, String name, double gpa) {
+        this.id = id;
+        this.name = name;
+        this.gpa = gpa;
+    }
+
+    @Override
+    public String toString() {
+        return "ID: " + id + " | Name: " + name + " | GPA: " + gpa;
+    }
+}
+
+public class StudentRecordSystem {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        List<Student> studentList = new ArrayList<>();
+
+        System.out.println("How many records do you want to enter?");
+        int count = scanner.nextInt();
+
+        for (int i = 0; i < count; i++) {
+            System.out.println("Enter details for Student " + (i + 1) + ":");
+            System.out.print("ID: ");
+            int id = scanner.nextInt();
+            scanner.nextLine(); 
+            System.out.print("Name: ");
+            String name = scanner.nextLine();
+            System.out.print("GPA: ");
+            double gpa = scanner.nextDouble();
+
+            studentList.add(new Student(id, name, gpa));
+        }
+
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("records.ser"))) {
+            oos.writeObject(studentList);
+            System.out.println("\nRecords saved to file successfully.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("\nReading records from file...");
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("records.ser"))) {
+            @SuppressWarnings("unchecked")
+            List<Student> savedRecords = (List<Student>) ois.readObject();
+            for (Student s : savedRecords) {
+                System.out.println(s);
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        scanner.close();
+    }
+}
