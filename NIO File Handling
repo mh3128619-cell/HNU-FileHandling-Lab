@@ -1,0 +1,29 @@
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.List;
+import java.io.IOException;
+
+public class NIOHandling {
+    public static void main(String[] args) {
+        Path source = Paths.get("input.txt");
+        Path destination = Paths.get("output.txt");
+        Path backup = Paths.get("backup.txt");
+
+        try {
+            List<String> lines = Files.readAllLines(source);
+            System.out.println("File read successfully.");
+
+            Files.write(destination, lines);
+            System.out.println("Data written to another file.");
+
+            Files.copy(source, backup, StandardCopyOption.REPLACE_EXISTING);
+            System.out.println("File copied to backup.");
+
+        } catch (IOException e) {
+            System.out.println("An error occurred during NIO operations.");
+            e.printStackTrace();
+        }
+    }
+}
