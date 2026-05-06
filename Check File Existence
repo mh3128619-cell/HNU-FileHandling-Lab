@@ -1,0 +1,16 @@
+import java.io.File;
+
+public class CheckFileExistence {
+    public static void main(String[] args) {
+        // Create a File object for input.txt
+        File file = new File("input.txt");
+
+        // Check if the file exists
+        if (file.exists()) {
+            System.out.println("File exists!");
+            System.out.println("Absolute Path: " + file.getAbsolutePath());
+        } else {
+            System.out.println("File not found");
+        }
+    }
+}
