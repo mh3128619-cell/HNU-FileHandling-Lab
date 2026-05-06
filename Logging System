@@ -1,0 +1,28 @@
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+public class LoggingSystem {
+    public static void main(String[] args) {
+        logMessage("System started");
+        logMessage("User logged in: Mohamed");
+        logMessage("Error: Connection timeout");
+    }
+
+    public static void logMessage(String message) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("log.txt", true))) {
+            LocalDateTime now = LocalDateTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            String timestamp = now.format(formatter);
+
+            writer.write("[" + timestamp + "] " + message);
+            writer.newLine();
+            
+            System.out.println("Logged: " + message);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
