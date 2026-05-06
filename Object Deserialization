@@ -1,0 +1,21 @@
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+
+public class DeserializeStudent {
+    public static void main(String[] args) {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("student.ser"))) {
+            
+            Student student = (Student) ois.readObject();
+            
+            System.out.println("Student details retrieved from file:");
+            System.out.println("ID: " + student.id);
+            System.out.println("Name: " + student.name);
+            System.out.println("GPA: " + student.gpa);
+            
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("An error occurred during deserialization.");
+            e.printStackTrace();
+        }
+    }
+}
