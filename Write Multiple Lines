@@ -1,0 +1,31 @@
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Scanner;
+
+public class WriteMultipleLines {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter("user_input.txt"));
+            
+            System.out.println("Enter at least 5 lines of text:");
+            
+            for (int i = 1; i <= 5; i++) {
+                System.out.print("Line " + i + ": ");
+                String line = scanner.nextLine();
+                writer.write(line);
+                writer.newLine();
+            }
+            
+            writer.close();
+            scanner.close();
+            System.out.println("Successfully saved to user_input.txt");
+            
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+    }
+}
