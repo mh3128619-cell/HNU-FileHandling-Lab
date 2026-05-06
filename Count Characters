@@ -1,0 +1,30 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
+public class CountCharacters {
+    public static void main(String[] args) {
+        int characterCount = 0;
+        
+        try {
+            File file = new File("output.txt");
+            Scanner reader = new Scanner(file);
+
+            while (reader.hasNextLine()) {
+                String line = reader.nextLine();
+                
+                for (int i = 0; i < line.length(); i++) {
+                    if (line.charAt(i) != ' ') {
+                        characterCount++;
+                    }
+                }
+            }
+            
+            reader.close();
+            System.out.println("Total characters (excluding spaces): " + characterCount);
+
+        } catch (FileNotFoundException e) {
+            System.out.println("Error: File not found.");
+        }
+    }
+}
