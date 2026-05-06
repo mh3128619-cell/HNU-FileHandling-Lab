@@ -1,0 +1,31 @@
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+
+class Student implements Serializable {
+    private static final long serialVersionUID = 1L; // Recommended for version control
+    int id;
+    String name;
+    double gpa;
+
+    public Student(int id, String name, double gpa) {
+        this.id = id;
+        this.name = name;
+        this.gpa = gpa;
+    }
+}
+
+public class SerializeStudent {
+    public static void main(String[] args) {
+        Student student = new Student(101, "Mohamed", 3.8);
+
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("student.ser"))) {
+            oos.writeObject(student);
+            System.out.println("Student object has been serialized to student.ser");
+        } catch (IOException e) {
+            System.out.println("An error occurred during serialization.");
+            e.printStackTrace();
+        }
+    }
+}
